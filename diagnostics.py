@@ -160,27 +160,21 @@ def plot_reconstructions(
 ):
     show_obs_ids = obs_ids is None
     util.logging.info("plot_reconstructions")
-    if dataset == "mnist":
-        data_train, _, _ = data.load_binarized_mnist(location=data_location)
-    elif dataset == "omniglot":
-        (
-            data_train,
-            data_valid,
-            data_test,
-            target_train,
-            target_valid,
-            target_test,
-        ) = data.load_binarized_omniglot_with_targets(location=args.data_location)
+    (
+        data_train,
+        data_valid,
+        data_test,
+        target_train,
+        target_valid,
+        target_test,
+    ) = data.load_binarized_omniglot_with_targets(location=args.data_location)
     if dataset_size is not None:
-        if dataset == "mnist":
+        if legacy_index:
             data_train = data_train[:dataset_size]
-        elif dataset == "omniglot":
-            if legacy_index:
-                data_train = data_train[:dataset_size]
-            else:
-                data_train, target_train = data.split_data_by_target(
-                    data_train, target_train, num_data_per_target=dataset_size // 50
-                )
+        else:
+            data_train, target_train = data.split_data_by_target(
+                data_train, target_train, num_data_per_target=dataset_size // 50
+            )
     if memory is None:
         ids = False
     else:
@@ -688,7 +682,9 @@ def plot_alphabets(
         axs[1].imshow(
             tile(
                 get_reconstructions(
-                    obs_id=torch.arange(len(data_train), device=device)[target_train_numeric == alphabet_id],
+                    obs_id=torch.arange(len(data_train), device=device)[
+                        target_train_numeric == alphabet_id
+                    ],
                     obs=(
                         data_train[target_train_numeric == alphabet_id],
                         target_train[target_train_numeric == alphabet_id],
