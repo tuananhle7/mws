@@ -154,7 +154,6 @@ def plot_reconstructions(
     data_location,
     dataset_size,
     memory=None,
-    legacy_index=False,
     resolution=28,
     obs_ids=None,
 ):
@@ -169,12 +168,9 @@ def plot_reconstructions(
         target_test,
     ) = data.load_binarized_omniglot_with_targets(location=args.data_location)
     if dataset_size is not None:
-        if legacy_index:
-            data_train = data_train[:dataset_size]
-        else:
-            data_train, target_train = data.split_data_by_target(
-                data_train, target_train, num_data_per_target=dataset_size // 50
-            )
+        data_train, target_train = data.split_data_by_target(
+            data_train, target_train, num_data_per_target=dataset_size // 50
+        )
     if memory is None:
         ids = False
     else:
@@ -618,7 +614,6 @@ def plot_alphabets(
     data_location,
     inference_network,
     memory=None,
-    legacy_index=False,
     resolution=28,
     alphabet_ids=None,
     num_rows=4,
@@ -637,13 +632,9 @@ def plot_alphabets(
     ) = data.load_binarized_omniglot_with_targets(location=data_location)
 
     if dataset_size is not None:
-        if legacy_index:
-            data_train = data_train[:dataset_size]
-            target_train = target_train[:dataset_size]
-        else:
-            data_train, target_train = data.split_data_by_target(
-                data_train, target_train, num_data_per_target=dataset_size // 50
-            )
+        data_train, target_train = data.split_data_by_target(
+            data_train, target_train, num_data_per_target=dataset_size // 50
+        )
 
     data_train = torch.tensor(data_train, dtype=torch.float, device=device)
     target_train = torch.tensor(target_train, dtype=torch.float, device=device)
@@ -791,7 +782,6 @@ def main(args):
                 dataset_size = data_train.shape[0]
             else:
                 dataset_size = run_args.dataset_size
-        legacy_index = False
 
         diagnostics_dir = util.get_save_dir(run_args)
         Path(diagnostics_dir).mkdir(parents=True, exist_ok=True)
@@ -804,7 +794,6 @@ def main(args):
                 run_args.data_location,
                 inference_network,
                 memory,
-                legacy_index,
                 resolution=args.resolution,
                 num_rows=args.alphabet_num_rows,
                 num_cols=args.alphabet_num_cols,
@@ -838,7 +827,6 @@ def main(args):
                 args.data_location,
                 dataset_size,
                 memory,
-                legacy_index,
                 args.resolution,
             )
 
