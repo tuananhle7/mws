@@ -5,7 +5,6 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 import models
-import alphabet_models
 import util
 
 import losses
@@ -486,24 +485,15 @@ def evaluate_logp_sleep(
     log_interval,
 ):
     device = next(generative_model.parameters()).device
-    if generative_model.use_alphabet:
-        inference_network = alphabet_models.InferenceNetwork(
-            generative_model.num_primitives,
-            lstm_hidden_size,
-            generative_model.num_rows,
-            generative_model.num_cols,
-            generative_model.num_arcs,
-            obs_embedding_dim,
-        ).to(device)
-    else:
-        inference_network = models.InferenceNetwork(
-            generative_model.num_primitives,
-            lstm_hidden_size,
-            generative_model.num_rows,
-            generative_model.num_cols,
-            generative_model.num_arcs,
-            obs_embedding_dim,
-        ).to(device)
+    inference_network = models.InferenceNetwork(
+        generative_model.num_primitives,
+        lstm_hidden_size,
+        generative_model.num_rows,
+        generative_model.num_cols,
+        generative_model.num_arcs,
+        obs_embedding_dim,
+        use_alphabet=generative_model.use_alphabet,
+    ).to(device)
 
     logp, losses = train_sleep_(
         generative_model,

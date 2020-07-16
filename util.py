@@ -1,5 +1,4 @@
 import os
-import alphabet_models
 import models
 import torch
 import math
@@ -142,11 +141,7 @@ def init_optimizer(generative_model, inference_network, prior_lr_factor):
 
 
 def init(run_args, device):
-    if run_args.condition_on_alphabet:
-        models_ = alphabet_models
-    else:
-        models_ = models
-    generative_model = models_.GenerativeModel(
+    generative_model = models.GenerativeModel(
         run_args.num_primitives,
         run_args.initial_max_curve,
         run_args.big_arcs,
@@ -156,8 +151,9 @@ def init(run_args, device):
         run_args.num_arcs,
         run_args.likelihood,
         run_args.p_uniform_mixture,
+        use_alphabet=run_args.condition_on_alphabet,
     ).to(device)
-    inference_network = models_.InferenceNetwork(
+    inference_network = models.InferenceNetwork(
         run_args.num_primitives,
         run_args.q_lstm_hidden_size,
         run_args.num_rows,
@@ -165,6 +161,7 @@ def init(run_args, device):
         run_args.num_arcs,
         run_args.obs_embedding_dim,
         run_args.q_uniform_mixture,
+        use_alphabet=run_args.condition_on_alphabet,
     ).to(device)
     optimizer = init_optimizer(generative_model, inference_network, 1,)
 
