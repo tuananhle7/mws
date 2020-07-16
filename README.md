@@ -53,6 +53,6 @@ The log likelihood values will be saved in `save/<path_base>/logp`.
 
 After the evaluation jobs have all finished, run
 ```
-python report_logp.py
+python eval_logp.py --report
 ```
 to report the log likelihood values and the max across `test_algorithm`s. This represents the best estimate of the log likelihood and is the value reported in the paper.
