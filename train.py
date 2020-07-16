@@ -211,31 +211,6 @@ def eval_gen_inf(generative_model, inference_network, data_loader, num_particles
     return log_p_total, reconstruction_log_prob_total
 
 
-def get_sleep_loss(generative_model, inference_network, num_samples=1):
-    """Returns:
-        loss: scalar that we call .backward() on and step the optimizer.
-    """
-
-    device = next(generative_model.parameters()).device
-    if generative_model.use_alphabet:
-        alphabet = (
-            torch.distributions.OneHotCategorical(logits=torch.ones(50, device=device).float())
-            .sample((num_samples,))
-            .contiguous()
-        )
-        latent, obs = generative_model.sample_latent_and_obs(alphabet=alphabet, num_samples=1)
-        latent = latent[0]
-        obs = obs[0]
-    else:
-        alphabet = None
-        latent, obs = generative_model.sample_latent_and_obs(
-            alphabet=alphabet, num_samples=num_samples
-        )
-    if generative_model.use_alphabet:
-        obs = (obs, alphabet)
-    return -torch.mean(inference_network.get_log_prob(latent, obs))
-
-
 def train_sleep(generative_model, inference_network, num_samples, num_iterations, log_interval):
     optimizer_phi = torch.optim.Adam(inference_network.parameters())
     losses = []
@@ -247,7 +222,7 @@ def train_sleep(generative_model, inference_network, num_samples, num_iterations
     iteration = 0
     while iteration < num_iterations:
         optimizer_phi.zero_grad()
-        sleep_phi_loss = get_sleep_loss(generative_model, inference_network, num_samples)
+        sleep_phi_loss = losses.get_sleep_loss(generative_model, inference_network, num_samples)
         sleep_phi_loss.backward()
         optimizer_phi.step()
 

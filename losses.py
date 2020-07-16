@@ -226,3 +226,28 @@ def get_mws_loss(generative_model, inference_network, memory, obs, obs_id, num_p
         novel_proportion.item(),
         new_map.item(),
     )
+
+
+def get_sleep_loss(generative_model, inference_network, num_samples=1):
+    """Returns:
+        loss: scalar that we call .backward() on and step the optimizer.
+    """
+
+    device = next(generative_model.parameters()).device
+    if generative_model.use_alphabet:
+        alphabet = (
+            torch.distributions.OneHotCategorical(logits=torch.ones(50, device=device).float())
+            .sample((num_samples,))
+            .contiguous()
+        )
+        latent, obs = generative_model.sample_latent_and_obs(alphabet=alphabet, num_samples=1)
+        latent = latent[0]
+        obs = obs[0]
+    else:
+        alphabet = None
+        latent, obs = generative_model.sample_latent_and_obs(
+            alphabet=alphabet, num_samples=num_samples
+        )
+    if generative_model.use_alphabet:
+        obs = (obs, alphabet)
+    return -torch.mean(inference_network.get_log_prob(latent, obs))
