@@ -19,7 +19,7 @@ import eval_logp
 def get_sweep_argss(test_run=False):
     # models in the paper
     # single-character model
-    for algorithm in ["mwsplus", "rws", "vimco"]:
+    for algorithm in ["mws", "rws", "vimco"]:
         for num_particles in [2, 5, 10, 50]:
             args = run.get_args_parser().parse_args([])
             args.test_run = test_run
@@ -34,7 +34,7 @@ def get_sweep_argss(test_run=False):
     args = run.get_args_parser().parse_args([])
     args.test_run = test_run
     args.num_particles = 50
-    args.algorithm = "mwsplus"
+    args.algorithm = "mws"
     args.small_dataset = True
     args.cuda = True
     args.data_location = "om"
@@ -46,7 +46,7 @@ def get_sweep_argss(test_run=False):
         args = run.get_args_parser().parse_args([])
         args.test_run = test_run
         args.num_particles = 50
-        args.algorithm = "mwsplus"
+        args.algorithm = "mws"
         args.small_dataset = False
         args.dataset_size = 10000
         args.cuda = True

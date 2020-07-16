@@ -102,10 +102,10 @@ def main(args):
             **algorithm_params,
             "num_particles": args.num_particles,
         }
-    elif args.algorithm == "mws" or args.algorithm == "mwsplus":
+    elif args.algorithm == "mws":
         algorithm_params = {
             **algorithm_params,
-            "num_particles": 1 if args.algorithm == "mws" else args.num_particles,
+            "num_particles": args.num_particles,
             "memory_size": args.memory_size,
         }
     else:
@@ -163,9 +163,7 @@ def get_args_parser():
     parser.add_argument("--big-arcs", action="store_true", help=" ")
 
     # train
-    parser.add_argument(
-        "--algorithm", default="mwsplus", choices=["mws", "mwsplus", "rws", "vimco"], help=" "
-    )
+    parser.add_argument("--algorithm", default="mws", choices=["mws", "rws", "vimco"], help=" ")
     parser.add_argument("--prior-lr-factor", default=1.0, type=float)
     parser.add_argument("--pretrain-iterations", type=int, default=10000, help=" ")
     parser.add_argument("--prior-anneal-iterations", type=int, default=0, help=" ")

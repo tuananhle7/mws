@@ -47,7 +47,7 @@ def train(
                     obs_id,
                     algorithm_params["num_particles"],
                 )
-            elif algorithm == "mws" or algorithm == "mwsplus":
+            elif algorithm == "mws":
                 (
                     loss,
                     theta_loss,
@@ -75,7 +75,7 @@ def train(
             stats.theta_losses.append(theta_loss)
             stats.phi_losses.append(phi_loss)
 
-            if algorithm == "mws" or algorithm == "mwsplus":
+            if algorithm == "mws":
                 stats.prior_losses.append(prior_loss)
                 if accuracy is not None:
                     stats.accuracies.append(accuracy)
@@ -85,7 +85,7 @@ def train(
                     stats.new_maps.append(new_map)
 
             if iteration % algorithm_params["log_interval"] == 0:
-                if algorithm == "mws" or algorithm == "mwsplus":
+                if algorithm == "mws":
                     util.logging.info(
                         "it. {}/{} | prior loss = {:.2f} | theta loss = {:.2f} | "
                         "phi loss = {:.2f} | accuracy = {}% | novel = {}% | new map = {}% "
