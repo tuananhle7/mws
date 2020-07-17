@@ -856,7 +856,7 @@ def get_parser():
     parser.add_argument("--diagnostics-dir", default="diagnostics", help=" ")
     parser.add_argument("--loss-only", action="store_true")
     parser.add_argument("--resolution", type=int, default=28)
-    parser.add_argument("--num-reconstructions", type=int, default=20, help=" ")
+    parser.add_argument("--num-reconstructions", type=int, default=100, help=" ")
     parser.add_argument("--num-prior-samples", type=int, default=100)
     parser.add_argument("--alphabet-num-rows", type=int, default=4)
     parser.add_argument("--alphabet-num-cols", type=int, default=5)
