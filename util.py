@@ -25,11 +25,16 @@ def get_path_base_from_args(args):
         prefix = ""
 
     if args.small_dataset:
-        suffix = "small"
+        suffix = ""
     else:
-        suffix = "large"
+        suffix = "_large"
 
-    return f"{prefix}{args.algorithm}_{args.num_particles}_{suffix}"
+    if args.algorithm == "mws":
+        num_samples = args.num_particles + args.memory_size
+    else:
+        num_samples = args.num_particles
+
+    return f"{prefix}{args.algorithm}_{num_samples}_{suffix}"
 
 
 def get_save_job_name_from_args(args):

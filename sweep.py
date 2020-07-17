@@ -14,16 +14,21 @@ import socket
 import util
 import run
 import eval_logp
+import math
 
 
 def get_sweep_argss(test_run=False):
     # models in the paper
     # single-character model
     for algorithm in ["mws", "rws", "vimco"]:
-        for num_particles in [2, 5, 10, 50]:
+        for num_particles in [3, 5, 10, 20, 40]:
             args = run.get_args_parser().parse_args([])
+            if algorithm == "mws":
+                args.memory_size = math.ceil(num_particles / 2)
+                args.num_particles = num_particles - args.memory_size
+            else:
+                args.num_particles = num_particles
             args.test_run = test_run
-            args.num_particles = num_particles
             args.algorithm = algorithm
             args.small_dataset = True
             args.cuda = True
@@ -33,7 +38,8 @@ def get_sweep_argss(test_run=False):
     # alphabet-conditional model
     args = run.get_args_parser().parse_args([])
     args.test_run = test_run
-    args.num_particles = 50
+    args.num_particles = 20
+    args.memory_size = 20
     args.algorithm = "mws"
     args.small_dataset = True
     args.cuda = True
@@ -41,11 +47,12 @@ def get_sweep_argss(test_run=False):
     args.condition_on_alphabet = True
     yield args
 
-    # models on larger alphabet
+    # models on larger dataset
     for condition_on_alphabet in [True, False]:
         args = run.get_args_parser().parse_args([])
         args.test_run = test_run
-        args.num_particles = 50
+        args.num_particles = 20
+        args.memory_size = 20
         args.algorithm = "mws"
         args.small_dataset = False
         args.dataset_size = 10000
