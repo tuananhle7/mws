@@ -831,11 +831,7 @@ def main(args):
             )
 
         plot_primitives(f"{diagnostics_dir}/primitives/{iteration}.pdf", generative_model)
-        if (
-            (not generative_model.pixelcnn_likelihood)
-            and (not run_args.condition_on_alphabet)
-            and (not generative_model.likelihood == "classify")
-        ):
+        if (not run_args.condition_on_alphabet) and (not generative_model.likelihood == "classify"):
             plot_prior(
                 f"{diagnostics_dir}/prior/{iteration}.pdf",
                 generative_model,
