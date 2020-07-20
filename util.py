@@ -34,7 +34,7 @@ def get_path_base_from_args(args):
     else:
         num_samples = args.num_particles
 
-    return f"{prefix}{args.algorithm}_{num_samples}_{suffix}"
+    return f"{prefix}{args.algorithm}_{num_samples}{suffix}"
 
 
 def get_save_job_name_from_args(args):

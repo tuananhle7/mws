@@ -213,7 +213,7 @@ def eval_gen_inf(generative_model, inference_network, data_loader, num_particles
 
 def train_sleep(generative_model, inference_network, num_samples, num_iterations, log_interval):
     optimizer_phi = torch.optim.Adam(inference_network.parameters())
-    losses = []
+    sleep_losses = []
     device = next(generative_model.parameters()).device
     if device.type == "cuda":
         torch.cuda.reset_max_memory_allocated(device=device)
@@ -226,7 +226,7 @@ def train_sleep(generative_model, inference_network, num_samples, num_iterations
         sleep_phi_loss.backward()
         optimizer_phi.step()
 
-        losses.append(sleep_phi_loss.item())
+        sleep_losses.append(sleep_phi_loss.item())
         iteration += 1
         # by this time, we have gone through `iteration` iterations
         if iteration % log_interval == 0:
@@ -235,7 +235,7 @@ def train_sleep(generative_model, inference_network, num_samples, num_iterations
                 "GPU memory = {:.2f} MB".format(
                     iteration,
                     num_iterations,
-                    losses[-1],
+                    sleep_losses[-1],
                     (
                         torch.cuda.max_memory_allocated(device=device) / 1e6
                         if device.type == "cuda"
