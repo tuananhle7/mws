@@ -527,11 +527,12 @@ def report_logp():
                 lossess[test_algorithm] = losses
             except FileNotFoundError:
                 util.logging.info("skipping {}".format(save_path))
-        util.logging.info(f"log_ps = {log_ps}")
-        log_ps_values = list(log_ps.values())
-        util.logging.info(
-            f"best log_p ({test_algorithms[np.argmax(log_ps_values)]}): {np.max(log_ps_values)}"
-        )
+        if len(log_ps.values()) > 0:
+            util.logging.info(f"log_ps = {log_ps}")
+            log_ps_values = list(log_ps.values())
+            util.logging.info(
+                f"best log_p ({test_algorithms[np.argmax(log_ps_values)]}): {np.max(log_ps_values)}"
+            )
         print("-------------")
 
 
