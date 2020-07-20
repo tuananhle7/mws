@@ -1,15 +1,27 @@
-# Train
+# Handwritten characters
+
+This code reproduces experiments in section 4.2 in the paper.
+![](reconstructions.gif)
+
+## Train
 
 You can either train single models or run a sweep over several models.
 
-## Train a single model
+### Train a single model
 To train a single model, run
 ```
 python main.py --cuda --data-location om
 ```
 Run `python main.py --help` for help. To train an alphabet-conditional model, use the `--condition-on-alphabet` flag.
 
-## Sweep over several models
+### Sweep over several models
+Running `sweep.py` is only compatible with slurm-based clusters and requires installing [openmind-tools](https://github.com/insperatum/openmind-tools), for example by running
+```
+cd ~
+git clone git@github.com:insperatum/openmind-tools.git
+echo 'export PATH="$HOME/openmind-tools/bin:$PATH"' >> ~/.bashrc
+```
+
 To run a training sweep over the models included in the paper, run
 ```
 python sweep.py --cluster
@@ -22,7 +34,7 @@ In both cases, the model checkpoints will be saved in `save/<path_base>/checkpoi
 
 where `<path_base>` is specified in `util.get_path_base` given run args.
 
-# Plot
+## Plot
 
 To plot diagnostics, run
 ```
@@ -39,7 +51,7 @@ in `save/<path_base>/` where `<path_base>` is specified in `util.get_path_base`.
 To specify a particular checkpoint to plot, use the `--checkpoint-path <checkpoint_path>` flag.
 
 
-# Evaluating test log likelihood
+## Evaluating test log likelihood
 
 To evaluate the test likelihood of the trained models, run a sweep by running
 ```
