@@ -47,21 +47,6 @@ def get_sweep_argss(test_run=False):
     args.condition_on_alphabet = True
     yield args
 
-    # models on larger dataset
-    for condition_on_alphabet in [True, False]:
-        args = run.get_args_parser().parse_args([])
-        args.test_run = test_run
-        args.num_particles = 20
-        args.memory_size = 20
-        args.algorithm = "mws"
-        args.small_dataset = False
-        args.dataset_size = 10000
-        args.cuda = True
-        args.data_location = "om"
-        args.condition_on_alphabet = condition_on_alphabet
-        args.num_iterations = 1000000
-        yield args
-
 
 def args_to_str(args):
     result = ""
