@@ -12,6 +12,7 @@ def get_latent_and_log_weight_and_log_q(
         generative_model: models.GenerativeModel object
         inference_network: models.InferenceNetwork object
         obs: tensor of shape [batch_size, num_rows, num_cols]
+        obs_id: long tensor of shape [batch_size]
         num_particles: int
 
     Returns:
@@ -35,6 +36,7 @@ def get_log_weight_and_log_q(generative_model, inference_network, obs, obs_id, n
         generative_model: models.GenerativeModel object
         inference_network: models.InferenceNetwork object
         obs: tensor of shape [batch_size, num_rows, num_cols]
+        obs_id: long tensor of shape [batch_size]
         num_particles: int
 
     Returns:
@@ -94,6 +96,7 @@ def get_vimco_loss(generative_model, inference_network, obs, obs_id, num_particl
         generative_model: models.GenerativeModel object
         inference_network: models.InferenceNetwork object
         obs: tensor of shape [batch_size, num_rows, num_cols]
+        obs_id: long tensor of shape [batch_size]
         num_particles: int
 
     Returns:
@@ -131,6 +134,21 @@ def get_vimco_loss(generative_model, inference_network, obs, obs_id, num_particl
 
 
 def get_mws_loss(generative_model, inference_network, memory, obs, obs_id, num_particles):
+    """
+    Args:
+        generative_model: models.GenerativeModel object
+        inference_network: models.InferenceNetwork object
+        memory: tensor of shape [num_data, memory_size, num_arcs, 2]
+        obs: tensor of shape [batch_size, num_rows, num_cols]
+        obs_id: long tensor of shape [batch_size]
+        num_particles: int
+
+    Returns:
+        loss: scalar that we call .backward() on and step the optimizer.
+        theta_loss: python float
+        phi_loss: python float
+        prior_loss, accuracy, novel_proportion, new_map: python float
+    """
     memory_size = memory.shape[1]
 
     # Propose latents from inference network
