@@ -2,6 +2,7 @@ import torch
 
 import util
 import train
+from pathlib import Path
 
 
 def run(args):
@@ -33,12 +34,10 @@ def run(args):
 
     # train
     util.print_with_time("train")
-    if args.test_run:
-        checkpoint_path = "checkpoint.pt"
-    else:
-        checkpoint_path = "checkpoints/{}_{}_{}_{}.pt".format(
-            args.checkpoint_path_prefix, args.algorithm, args.seed, args.num_particles
-        )
+    checkpoint_path = "checkpoints/{}_{}_{}_{}.pt".format(
+        args.checkpoint_path_prefix, args.algorithm, args.num_particles, args.seed
+    )
+    Path("checkpoints/").mkdir(parents=True, exist_ok=True)
     if args.algorithm == "mws":
         (
             theta_losses,
@@ -205,7 +204,7 @@ def run(args):
     )
 
 
-if __name__ == "__main__":
+def get_args_parser():
     import argparse
 
     parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
@@ -215,13 +214,15 @@ if __name__ == "__main__":
     parser.add_argument("--num-dim", type=int, default=2, help=" ")
     parser.add_argument("--num-data", type=int, default=7, help=" ")
     # parser.add_argument('--num-train', type=int, default=100, help=' ')
-    parser.add_argument("--num-iterations", type=int, default=10000, help=" ")
+    parser.add_argument("--num-iterations", type=int, default=50000, help=" ")
     parser.add_argument("--num-particles", type=int, default=5, help=" ")
     parser.add_argument("--memory-size", type=int, default=5, help=" ")
     # parser.add_argument('--num-test', type=int, default=100, help=' ')
     parser.add_argument("--test-num-particles", type=int, default=5000, help=" ")
     parser.add_argument("--checkpoint-path-prefix", default="checkpoint", help=" ")
     parser.add_argument("--seed", type=int, default=1, help=" ")
-    parser.add_argument("--test-run", action="store_true", help="test run")
-    args = parser.parse_args()
-    run(args)
+    return parser
+
+
+if __name__ == "__main__":
+    run(get_args_parser().parse_args())

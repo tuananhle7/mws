@@ -34,9 +34,10 @@ def plot_errors_end(ax, num_particles, mid, lower, upper, **plot_kwargs):
 
 def load(algorithm, num_particles):
     things = [[] for _ in range(19)]
-    for seed in range(1, 11):
+    # for seed in range(1, 11):
+    for seed in range(3):
         checkpoint_path = "checkpoints/checkpoint_{}_{}_{}.pt".format(
-            algorithm, seed, num_particles
+            algorithm, num_particles, seed
         )
         checkpoint = util.load_checkpoint(checkpoint_path, torch.device("cpu"))
         for i, x in enumerate(checkpoint[2:-3] + checkpoint[-2:]):
@@ -166,8 +167,8 @@ def plot_clustering(ax, obs, latent):
         )
 
 
-def load_gen_inf_mem(algorithm, seed, num_particles):
-    checkpoint_path = "checkpoints/checkpoint_{}_{}_{}.pt".format(algorithm, seed, num_particles)
+def load_gen_inf_mem(algorithm, num_particles, seed):
+    checkpoint_path = "checkpoints/checkpoint_{}_{}_{}.pt".format(algorithm, num_particles, seed)
 
     (
         generative_model,
@@ -450,7 +451,7 @@ def main(args):
     for j in range(len(algorithms)):
         algorithm = algorithms[order[j]]
         generative_model, inference_network, memory = load_gen_inf_mem(
-            algorithm, seed, num_particles
+            algorithm, num_particles, seed
         )
 
         if algorithm == "mws":
