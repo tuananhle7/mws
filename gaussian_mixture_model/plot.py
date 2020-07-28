@@ -34,8 +34,7 @@ def plot_errors_end(ax, num_particles, mid, lower, upper, **plot_kwargs):
 
 def load(algorithm, num_particles):
     things = [[] for _ in range(19)]
-    # for seed in range(1, 11):
-    for seed in range(3):
+    for seed in range(10):
         checkpoint_path = "checkpoints/checkpoint_{}_{}_{}.pt".format(
             algorithm, num_particles, seed
         )

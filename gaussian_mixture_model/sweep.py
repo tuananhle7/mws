@@ -18,7 +18,7 @@ import run
 def get_sweep_argss(test_run=False):
     # models in the paper
     # single-character model
-    for seed in range(3):
+    for seed in range(10):
         for algorithm in ["mws", "rws", "vimco"]:
             for num_particles in [2, 5, 10, 20, 50]:
                 args = run.get_args_parser().parse_args([])
